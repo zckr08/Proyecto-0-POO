@@ -9,7 +9,7 @@ public class Cliente implements Serializable {
     private String email;
     private String telefono;
 
-    public Cliente(String nombre, String email, String telefono) {
+    public Cliente(String nombre, String email, String telefono) throws Exception {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new Exception("El nombre del cliente no puede estar vacío.");
         }
