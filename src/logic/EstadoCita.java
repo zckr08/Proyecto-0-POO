@@ -1,4 +1,4 @@
-package Logica;
+package logic;
 
 public enum EstadoCita {
     CONFIRMADA,
