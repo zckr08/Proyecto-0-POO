@@ -41,7 +41,7 @@ public class Controladora implements Serializable {
     private List<Cliente> listaEspera;
     private Map<String, Cliente> clientes;
     private static final String CORREO_EMISOR = "mmmusecuts@gmail.com";
-    private static final String CLAVE_CORREO = "99hvKBY8ond&";
+    private static final String CLAVE_CORREO = "zciryncmvqhwpego";
 
     private Controladora(){
         citas = new ArrayList<>();
