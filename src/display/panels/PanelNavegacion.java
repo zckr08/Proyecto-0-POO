@@ -10,6 +10,8 @@ public class PanelNavegacion extends JPanel {
     public PanelNavegacion(PanelContenido contenido) {
         this.contenido = contenido;
 
+        this.setBackground(Colores.VERDE);
+
         JButton botonCitas = new JButton("Citas");
         JButton botonClientes = new JButton("Clientes");
         JButton botonListaEspera = new JButton("Lista de espera");

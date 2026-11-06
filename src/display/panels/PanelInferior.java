@@ -35,7 +35,7 @@ public class PanelInferior extends JPanel {
         });
 
         botonSalir.addActionListener(e -> {
-            contenido.setUpPanelContenido("clientes");
+            System.exit(0);
         });
 
         botonNotificar.addActionListener(e -> {

@@ -3,9 +3,11 @@ package display.frames;
 import javax.swing.*;
 import display.components.Colores;
 import display.components.Colores;
+import display.components.Fuentes;
 import display.panels.PanelContenido;
 import display.panels.PanelInferior;
 import display.panels.PanelNavegacion;
+import display.components.PanelTabla;
 
 import java.awt.*;
 
@@ -24,6 +26,8 @@ public class FramePrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        PanelTabla tabla = new PanelTabla(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL);
 
     }
 

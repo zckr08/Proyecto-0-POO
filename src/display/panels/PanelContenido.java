@@ -1,4 +1,3 @@
-
 package display.panels;
 
 import display.components.Colores;

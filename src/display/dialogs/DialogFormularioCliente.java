@@ -1,6 +1,140 @@
 package display.dialogs;
 
+
+import logic.Cliente;
+import control.Controladora;
 import javax.swing.*;
+import java.awt.*;
 
 public class DialogFormularioCliente extends JDialog {
+
+    public DialogFormularioCliente(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Cliente cliente) {
+        super(propietario, opcion, ModalityType.APPLICATION_MODAL);
+
+        controladora = Controladora.getInstance();
+
+        JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
+        titulo.setForeground(verdeClaro);
+        titulo.setBackground(verdeOscuro);
+        titulo.setFont(font);
+
+        JTextField campoNombre = new JTextField();
+        JTextField campoTelefono = new JTextField();
+        JTextField campoCorreo = new JTextField();
+
+        campoNombre.setFont(font);
+        campoNombre.setForeground(verdeOscuro);
+
+        campoTelefono.setFont(font);
+        campoTelefono.setForeground(verdeOscuro);
+
+        campoCorreo.setFont(font);
+        campoCorreo.setForeground(verdeOscuro);
+
+        if (opcion.equals("Modificar Cliente")) {
+            campoNombre.setText(cliente.getNombre());
+            campoTelefono.setText(cliente.getTelefono());
+            campoCorreo.setText(cliente.getEmail());
+
+            campoNombre.setEditable(true);
+            campoTelefono.setEditable(true);
+            campoCorreo.setEditable(true);
+        }
+
+        else if (opcion.equals("Crear Cliente")) {
+            campoNombre.setText("");
+            campoTelefono.setText("");
+            campoCorreo.setText("");
+
+            campoNombre.setEditable(true);
+            campoTelefono.setEditable(true);
+            campoCorreo.setEditable(true);
+        }
+
+        else if (opcion.equals("Consultar Cliente")) {
+            campoNombre.setText(cliente.getNombre());
+            campoTelefono.setText(cliente.getTelefono());
+            campoCorreo.setText(cliente.getEmail());
+
+            campoNombre.setEditable(false);
+            campoTelefono.setEditable(false);
+            campoCorreo.setEditable(false);
+        }
+
+        else if (opcion.equals("Se ha borrado un cliente!")) {
+            campoNombre.setText(cliente.getNombre());
+            campoTelefono.setText(cliente.getTelefono());
+            campoCorreo.setText(cliente.getEmail());
+
+            campoNombre.setEditable(false);
+            campoTelefono.setEditable(false);
+            campoCorreo.setEditable(false);
+        }
+
+        setSize(756, 369);
+        setLocationRelativeTo(propietario);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        setLayout(new BorderLayout());
+
+
+        JPanel formulario = new JPanel(new GridLayout(3,2,10,15));
+
+        formulario.setBackground(verdeClaro);
+
+        JButton botonConfirmar = new JButton("Confirmar");
+
+        botonConfirmar.setFont(font);
+        botonConfirmar.setBackground(verdeOscuro);
+        botonConfirmar.setForeground(verdeClaro);
+
+        botonConfirmar.addActionListener(e -> {
+            String nombre = campoNombre.getText();
+            String telefono = campoTelefono.getText();
+            String email = campoCorreo.getText();
+
+            if (opcion.equals("Modificar Cliente")) {
+                try {
+                    controladora.
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            else if (opcion.equals("Crear Cliente")) {
+                try {
+                    controladora.
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            else if (opcion.equals("Consultar Cliente")) {
+                try {
+                    controladora.
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            else if (opcion.equals("Se ha borrado un cliente!")) {
+                try {
+                    controladora.
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        formulario.add(new JLabel("Nombre:"));
+        formulario.add(campoNombre);
+        formulario.add(new JLabel("Telefono:"));
+        formulario.add(campoTelefono);
+        formulario.add(new JLabel("Correo: "));
+        formulario.add(campoCorreo);
+
+
+        add(formulario, BorderLayout.CENTER);
+        add(titulo, BorderLayout.NORTH);
+    }
 }
