@@ -1,0 +1,45 @@
+package display.panels;
+
+import javax.swing.*;
+import display.components.Colores;
+import display.components.Fuentes;
+
+public class PanelNavegacion extends JPanel {
+    private PanelContenido contenido;
+
+    public PanelNavegacion(PanelContenido contenido) {
+        this.contenido = contenido;
+
+        JButton botonCitas = new JButton("Citas");
+        JButton botonClientes = new JButton("Clientes");
+        JButton botonListaEspera = new JButton("Lista de espera");
+
+        botonCitas.setBackground(Colores.VERDE_OSCURO);
+        botonCitas.setFont(Fuentes.GENERAL);
+        botonCitas.setForeground(Colores.TEXTO);
+
+        botonClientes.setBackground(Colores.VERDE_OSCURO);
+        botonClientes.setFont(Fuentes.GENERAL);
+        botonClientes.setForeground(Colores.TEXTO);
+
+        botonListaEspera.setBackground(Colores.VERDE_OSCURO);
+        botonListaEspera.setFont(Fuentes.GENERAL);
+        botonListaEspera.setForeground(Colores.TEXTO);
+
+        botonCitas.addActionListener(e -> {
+            contenido.setUpPanelContenido("citas");
+        });
+
+        botonClientes.addActionListener(e -> {
+            contenido.setUpPanelContenido("clientes");
+        });
+
+        botonListaEspera.addActionListener(e -> {
+            contenido.setUpPanelContenido("lista_espera");
+        });
+
+        add(botonCitas);
+        add(botonClientes);
+        add(botonListaEspera);
+    }
+}
