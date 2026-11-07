@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 public class DialogFormularioCita extends JDialog {
 
-    public DialogFormularioCita(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Cita cita) {
+    public DialogFormularioCita(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Integer index) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
         Controladora controladora = Controladora.getInstance();
@@ -44,14 +44,14 @@ public class DialogFormularioCita extends JDialog {
         campoEstado.setForeground(verdeOscuro);
 
         if (opcion.equals("Modificar Cita")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
 
             campoFecha.setEditable(true);
             campoHora.setEditable(true);
@@ -75,14 +75,14 @@ public class DialogFormularioCita extends JDialog {
         }
 
         else if (opcion.equals("Consultar Cita")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
 
             campoFecha.setEditable(false);
             campoHora.setEditable(false);
@@ -92,14 +92,14 @@ public class DialogFormularioCita extends JDialog {
         }
 
         else if (opcion.equals("Se ha borrado una cita!")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
 
             campoFecha.setEditable(false);
             campoHora.setEditable(false);
@@ -134,7 +134,7 @@ public class DialogFormularioCita extends JDialog {
 
             if (opcion.equals("Modificar Cita")) {
                 try {
-                    controladora.
+                    controladora.modificarCita();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }

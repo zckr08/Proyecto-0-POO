@@ -383,6 +383,10 @@ public class Controladora implements Serializable {
         servicios.remove(servicio);
     }
 
+    public Cita getCita(Integer posCita) {
+        return citas.get(posCita);
+    }
+
     public String consultarServicio(Integer posServicio) throws Exception {
         return obtenerServicio(posServicio).toString();
     }
