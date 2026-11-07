@@ -171,6 +171,14 @@ public class Controladora implements Serializable {
         clientes.put(clave, cliente);
     }
 
+    public List<String> listaServicios() {
+        List<String> myList = new ArrayList<>();
+        for (Servicio s : servicios) {
+            myList.add(s.toString());
+        }
+        return myList;
+    }
+
     public void modificarCliente(Integer posCliente, String nombreCliente, String emailCliente, String numCliente) throws Exception {
         Cliente cliente = obtenerCliente(posCliente);
         // Los setters de Cliente no validan, se usa el constructor para reutilizar sus validaciones
