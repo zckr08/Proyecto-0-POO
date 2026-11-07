@@ -63,6 +63,15 @@ public class Controladora implements Serializable {
         return new ArrayList<>(clientes.values()).get(posCliente);
     }
 
+    public List<String> obtenerDatosCliente(Integer posCliente) throws Exception {
+        List<String> result = new ArrayList<>();
+        Cliente cliente = obtenerCliente(posCliente);
+        result.add(cliente.getNombre());
+        result.add(cliente.getTelefono());
+        result.add(cliente.getEmail());
+        return result;
+    }
+
     private void validarCita(Cita cita) throws Exception {
         if (cita == null || !citas.contains(cita)) {
             throw new Exception("La cita no existe.");
