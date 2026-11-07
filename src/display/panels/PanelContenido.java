@@ -19,7 +19,7 @@ public class PanelContenido extends JPanel {
         add(new PanelClientes(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "clientes");
         add(new PanelListaEspera(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "lista_espera");
         add(new PanelAgregarCliente(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "agregar_cliente");
-        add(new PanelBorrarCliente(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "borrar_cliente");
+        // add(new PanelBorrarCliente(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "borrar_cliente");
     }
 
     public void setUpPanelContenido(String nombre) {

@@ -40,5 +40,6 @@ public class PanelListaEspera extends JPanel {
         seccionBotones.add(botonAgregarALista, BorderLayout.CENTER);
         seccionBotones.add(botonEliminarDeLaLista, BorderLayout.SOUTH);
         seccionBotones.add(titulo, BorderLayout.NORTH);
+        add(seccionBotones);
     }
 }

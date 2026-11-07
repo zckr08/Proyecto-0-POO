@@ -225,13 +225,13 @@ public class Controladora implements Serializable {
         return resultado.toString();
     }
 
-    public List<String> getListaClientes() {
-       List<String> resultado = new ArrayList<>();
-       for (Cliente cliente : clientes.values()) {
-           resultado.add(cliente.toString());
-       }
-       return resultado;
-   }
+        public List<String> getListaClientes() {
+        List<String> resultado = new ArrayList<>();
+        for (Cliente cliente : clientes.values()) {
+            resultado.add(cliente.getNombre());
+        }
+        return resultado;
+    }
 
     public void crearCita(LocalDateTime fechaHora, Integer posCliente, Servicio servicio) throws Exception {
         Cliente cliente = obtenerCliente(posCliente);
