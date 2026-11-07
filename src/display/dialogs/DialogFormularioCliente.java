@@ -109,7 +109,7 @@ public class DialogFormularioCliente extends JDialog {
 
             if (opcion.equals("Modificar Cliente")) {
                 try {
-                    controladora.
+                    controladora.modificarCliente(index, nombre, email, telefono);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -117,26 +117,14 @@ public class DialogFormularioCliente extends JDialog {
 
             else if (opcion.equals("Crear Cliente")) {
                 try {
-                    controladora.
+                    controladora.crearCliente(nombre, email, telefono);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
-            else if (opcion.equals("Consultar Cliente")) {
-                try {
-                    controladora.
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
-            else if (opcion.equals("Se ha borrado un cliente!")) {
-                try {
-                    controladora.
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            else {
+                dispose();
             }
         });
 

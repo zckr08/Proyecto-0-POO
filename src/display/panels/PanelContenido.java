@@ -17,7 +17,7 @@ public class PanelContenido extends JPanel {
         add(new PanelBienvenida(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "bienvenida");
         add(new PanelCitas(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "citas");
         add(new PanelClientes(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "clientes");
-        add(new PanelListaEspera(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO), Fuentes.GENERAL, "lista_espera");
+        add(new PanelListaEspera(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "lista_espera");
         add(new PanelAgregarCliente(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "agregar_cliente");
         add(new PanelBorrarCliente(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL), "borrar_cliente");
     }

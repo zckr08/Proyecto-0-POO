@@ -15,7 +15,7 @@ public class DialogFormularioCita extends JDialog {
     public DialogFormularioCita(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Cita cita) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
-        controladora = Controladora.getInstance();
+        Controladora controladora = Controladora.getInstance();
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
         titulo.setForeground(verdeClaro);

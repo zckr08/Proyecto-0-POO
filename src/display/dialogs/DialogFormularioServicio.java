@@ -14,7 +14,7 @@ public class DialogFormularioServicio extends JDialog {
     public DialogFormularioServicio(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Servicio servicio) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
-        controladora = Controladora.getInstance();
+        Controladora controladora = Controladora.getInstance();
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
         titulo.setForeground(verdeClaro);
