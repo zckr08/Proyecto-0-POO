@@ -1,17 +1,23 @@
 package display.dialogs;
 
-
 import logic.Cliente;
 import control.Controladora;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class DialogFormularioCliente extends JDialog {
 
-    public DialogFormularioCliente(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Cliente cliente) {
+    public DialogFormularioCliente(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, int index) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
-        controladora = Controladora.getInstance();
+        Controladora controladora = Controladora.getInstance();
+        try {
+            List<String> datosClientes = controladora.obtenerDatosCliente(index);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
         titulo.setForeground(verdeClaro);
