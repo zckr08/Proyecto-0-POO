@@ -40,26 +40,42 @@ public class PanelClientes extends JPanel {
         botonBorrar.setBackground(verdeOscuro);
         botonBorrar.setForeground(verdeClaro);
         botonBorrar.addActionListener(e -> {
+            int pos = tablaCliente.getIndiceSeleccionado();
+            if (pos == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla.");
+        return;
+        }
+        try {
             Window ventana = SwingUtilities.getWindowAncestor(this);
-            DialogFormularioCliente dialogCliente = new DialogFormularioCliente(Colores.VERDE,
-                    Colores.VERDE_OSCURO,
-                    Colores.HUESO,
-                    Colores.VERDE_CLARO,
-                    Fuentes.GENERAL,
-                    "Se ha borrado un cliente!",
-                    ventana,
-                    //Se manda el indice del cliente seleccionado en vez del cliente
-                    //esto para evitar tocar la logica desde la interfaz y hacer que cualquier
-                    //funcionamiento pase por la capa de control
-                    tablaCliente.getIndiceSeleccionado());
+
+            // 1. Se construye antes de borrar: el constructor carga los datos del cliente
+            DialogFormularioCliente dialogCliente = new DialogFormularioCliente(
+                    Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO,
+                    Fuentes.GENERAL, "Se ha borrado un cliente!", ventana, pos);
+
+            // 2. Se borra. Si falla (por ejemplo, tiene citas), salta al catch
+            //    y el diálogo nunca se muestra
+            controladora.borrarCliente(pos);
+
+            // 3. Se actualiza la tabla y se muestra el diálogo
+            tablaCliente.setElementos(controladora.getListaClientes());
             dialogCliente.setVisible(true);
-        });
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    });
 
         botonModificar.setFont(font);
         botonModificar.setBackground(verdeOscuro);
         botonModificar.setForeground(verdeClaro);
 
         botonModificar.addActionListener(e -> {
+            int pos = tablaCliente.getIndiceSeleccionado();
+            if (pos == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla.");
+                return;
+            }
             Window ventana = SwingUtilities.getWindowAncestor(this);
             DialogFormularioCliente dialogCliente = new DialogFormularioCliente(Colores.VERDE,
                     Colores.VERDE_OSCURO,
@@ -69,6 +85,7 @@ public class PanelClientes extends JPanel {
                     "Modificar Cliente",
                     ventana, tablaCliente.getIndiceSeleccionado());
             dialogCliente.setVisible(true);
+            tablaCliente.setElementos(controladora.getListaClientes());
         });
 
         botonConsultar.setFont(font);
@@ -76,6 +93,11 @@ public class PanelClientes extends JPanel {
         botonConsultar.setForeground(verdeClaro);
 
         botonConsultar.addActionListener(e -> {
+            int pos = tablaCliente.getIndiceSeleccionado();
+            if (pos == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla.");
+                return;
+            }
             Window ventana = SwingUtilities.getWindowAncestor(this);
             DialogFormularioCliente dialogCliente = new DialogFormularioCliente(Colores.VERDE,
                     Colores.VERDE_OSCURO,
@@ -99,8 +121,9 @@ public class PanelClientes extends JPanel {
                     Colores.VERDE_CLARO,
                     Fuentes.GENERAL,
                     "Crear Cliente",
-                    ventana, tablaCliente.getIndiceSeleccionado());
+                    ventana,-1);
             dialogCliente.setVisible(true);
+            tablaCliente.setElementos(controladora.getListaClientes());
         });
 
         seccionBotones.add(botonBorrar);

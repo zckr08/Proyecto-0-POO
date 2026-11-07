@@ -107,5 +107,4 @@ public class PanelCitas extends JPanel {
         add(tablaCliente, BorderLayout.CENTER);
         add(seccionBotones, BorderLayout.SOUTH);
     }
-})
 }

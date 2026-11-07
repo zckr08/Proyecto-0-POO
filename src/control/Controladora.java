@@ -225,6 +225,14 @@ public class Controladora implements Serializable {
         return resultado.toString();
     }
 
+    public List<String> getListaClientes() {
+       List<String> resultado = new ArrayList<>();
+       for (Cliente cliente : clientes.values()) {
+           resultado.add(cliente.toString());
+       }
+       return resultado;
+   }
+
     public void crearCita(LocalDateTime fechaHora, Integer posCliente, Servicio servicio) throws Exception {
         Cliente cliente = obtenerCliente(posCliente);
         validarServicio(servicio);
@@ -277,6 +285,14 @@ public class Controladora implements Serializable {
             resultado.append(i).append(" - ").append(citas.get(i)).append("\n");
         }
         return resultado.toString();
+    }
+
+    public List<String> getListaCitas() {
+        List<String> resultado = new ArrayList<>();
+        for (Cita cita : citas) {
+            resultado.add(cita.toString());
+        }
+        return resultado;
     }
 
     public void confirmarCita(Integer posCita) throws Exception {
