@@ -13,10 +13,18 @@ public class DialogFormularioCliente extends JDialog {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
         Controladora controladora = Controladora.getInstance();
-        try {
-            List<String> datosClientes = controladora.obtenerDatosCliente(index);
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
+
+        List<String> datos = new ArrayList<>();
+        if (index >= 0) {
+            try {
+                datos = controladora.obtenerDatosCliente(index);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(propietario, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+        }
+
+        if (datos.size() < 3) {
+            datos = new ArrayList<>(List.of("", "", ""));
         }
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
@@ -38,9 +46,9 @@ public class DialogFormularioCliente extends JDialog {
         campoCorreo.setForeground(verdeOscuro);
 
         if (opcion.equals("Modificar Cliente")) {
-            campoNombre.setText(cliente.getNombre());
-            campoTelefono.setText(cliente.getTelefono());
-            campoCorreo.setText(cliente.getEmail());
+            campoNombre.setText(datos.get(0));
+            campoTelefono.setText(datos.get(1));
+            campoCorreo.setText(datos.get(2));
 
             campoNombre.setEditable(true);
             campoTelefono.setEditable(true);
@@ -58,9 +66,9 @@ public class DialogFormularioCliente extends JDialog {
         }
 
         else if (opcion.equals("Consultar Cliente")) {
-            campoNombre.setText(cliente.getNombre());
-            campoTelefono.setText(cliente.getTelefono());
-            campoCorreo.setText(cliente.getEmail());
+            campoNombre.setText(datos.get(0));
+            campoTelefono.setText(datos.get(1));
+            campoCorreo.setText(datos.get(2));
 
             campoNombre.setEditable(false);
             campoTelefono.setEditable(false);
@@ -68,9 +76,9 @@ public class DialogFormularioCliente extends JDialog {
         }
 
         else if (opcion.equals("Se ha borrado un cliente!")) {
-            campoNombre.setText(cliente.getNombre());
-            campoTelefono.setText(cliente.getTelefono());
-            campoCorreo.setText(cliente.getEmail());
+            campoNombre.setText(datos.get(0));
+            campoTelefono.setText(datos.get(1));
+            campoCorreo.setText(datos.get(2));
 
             campoNombre.setEditable(false);
             campoTelefono.setEditable(false);
