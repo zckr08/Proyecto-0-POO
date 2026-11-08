@@ -56,10 +56,8 @@ public class Controladora implements Serializable {
         return instance;
     }
 
-    private Cliente obtenerCliente(Integer posCliente) throws Exception {
-        if (posCliente == null || posCliente < 0 || posCliente >= clientes.size()) {
-            throw new Exception("La posición del cliente no es válida.");
-        }
+    public Cliente obtenerCliente(Integer posCliente) {
+
         return new ArrayList<>(clientes.values()).get(posCliente);
     }
 
