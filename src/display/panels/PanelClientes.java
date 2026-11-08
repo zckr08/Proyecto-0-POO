@@ -21,6 +21,10 @@ public class PanelClientes extends JPanel {
         Controladora controladora = Controladora.getInstance();
         setLayout(new BorderLayout());
         JLabel titulo = new JLabel("Clientes en Sistema", SwingConstants.CENTER);
+        titulo.setOpaque(true);
+        titulo.setBackground(verdeOscuro);
+        titulo.setForeground(verdeClaro);
+        titulo.setFont(font);
 
         PanelTabla tablaCliente = new PanelTabla(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL);
         List<String> nombresClientes = controladora.getListaClientes();
