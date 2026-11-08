@@ -1,25 +1,26 @@
-package display.panels;
 
-import display.components.PanelCalendario;
+package display.panels;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PanelBienvenida extends JPanel {
-    private PanelCalendario calendario;
+
+    private JLabel mensaje;
 
     public PanelBienvenida(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font) {
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());
         setBackground(hueso);
-        calendario = new PanelCalendario();
-        add(calendario, BorderLayout.CENTER);
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        if (visible && calendario != null) {
-            calendario.actualizar();
-        }
+        mensaje = new JLabel(
+                "<html><div style='text-align: center;'>"
+                        + "Bienvenido a su gestor.<br>"
+                        + "Aqui podra administrar sus clientes,<br>"
+                        + "servicios, citas y horarios.<br>"
+                        + "Gracias por usar. :)"
+                        + "</div></html>"
+        );
+        mensaje.setFont(font);
+        mensaje.setForeground(verdeOscuro);
+        add(mensaje);
     }
 }

@@ -1,14 +1,13 @@
 package display.panels;
 
+import javax.swing.*;
+
 import display.components.Colores;
 import display.components.Fuentes;
-import display.frames.FrameHorario;
-import display.frames.FrameServicios;
+import display.dialogs.DialogEstablecerHorario;
 import display.frames.FrameEnviarCorreoConfirmacion;
 
-import javax.swing.*;
-import java.awt.Window;
-import java.awt.event.WindowEvent;
+import java.awt.*;
 
 public class PanelInferior extends JPanel {
 
@@ -17,40 +16,37 @@ public class PanelInferior extends JPanel {
 
         JButton botonHorario = new JButton("Horario");
         JButton botonSalir = new JButton("Salir");
-        JButton botonServicios = new JButton("Servicios");
         JButton botonNotificar = new JButton("Notificar");
 
-        for (JButton boton : new JButton[]{botonHorario, botonSalir, botonServicios, botonNotificar}) {
-            boton.setBackground(Colores.VERDE_OSCURO);
-            boton.setFont(Fuentes.GENERAL);
-            boton.setForeground(Colores.TEXTO);
-        }
+        botonHorario.setBackground(Colores.VERDE_OSCURO);
+        botonHorario.setFont(Fuentes.GENERAL);
+        botonHorario.setForeground(Colores.TEXTO);
+
+        botonSalir.setBackground(Colores.VERDE_OSCURO);
+        botonSalir.setFont(Fuentes.GENERAL);
+        botonSalir.setForeground(Colores.TEXTO);
+
+        botonNotificar.setBackground(Colores.VERDE_OSCURO);
+        botonNotificar.setFont(Fuentes.GENERAL);
+        botonNotificar.setForeground(Colores.TEXTO);
 
         botonHorario.addActionListener(e -> {
-            FrameHorario ventana = new FrameHorario();
-            ventana.setVisible(true);
+            Window ventana = SwingUtilities.getWindowAncestor(this);
+            DialogEstablecerHorario dialogHorario = new DialogEstablecerHorario(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.TEXTO, Fuentes.GENERAL, "Establecer horario", ventana);
+            dialogHorario.setVisible(true);
         });
 
         botonSalir.addActionListener(e -> {
-            Window ventana = SwingUtilities.getWindowAncestor(this);
-            if (ventana != null) {
-                ventana.dispatchEvent(new WindowEvent(ventana, WindowEvent.WINDOW_CLOSING));
-            }
-        });
-
-        botonServicios.addActionListener(e -> {
-            FrameServicios ventana = new FrameServicios();
-            ventana.setVisible(true);
+            System.exit(0);
         });
 
         botonNotificar.addActionListener(e -> {
-            FrameEnviarCorreoConfirmacion ventana = new FrameEnviarCorreoConfirmacion();
-            ventana.setVisible(true);
+            FrameEnviarCorreoConfirmacion frameConfirmacion = new FrameEnviarCorreoConfirmacion();
+            frameConfirmacion.setVisible(true);
         });
 
         add(botonHorario);
         add(botonSalir);
-        add(botonServicios);
         add(botonNotificar);
     }
 }

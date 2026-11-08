@@ -3,7 +3,6 @@ package display.panels;
 import control.Controladora;
 import display.components.Colores;
 import display.components.Fuentes;
-import display.components.PanelCalendario;
 import display.components.PanelTabla;
 import display.dialogs.DialogFormularioCita;
 
@@ -15,40 +14,33 @@ public class PanelCitas extends JPanel {
 
     public PanelCitas(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font) {
         Controladora controladora = Controladora.getInstance();
-        setLayout(new BorderLayout(0, 5));
-        setBackground(hueso);
-
-        JLabel titulo = new JLabel("Menú de citas", SwingConstants.CENTER);
+        setLayout(new BorderLayout());
+        JLabel titulo = new JLabel("Menu de citas", SwingConstants.CENTER);
         titulo.setOpaque(true);
         titulo.setBackground(verdeOscuro);
         titulo.setForeground(verdeClaro);
-        titulo.setFont(Fuentes.CALENDARIO);
+        titulo.setFont(font);
 
-        PanelTabla tablaCitas = new PanelTabla(Colores.VERDE, Colores.VERDE_OSCURO,
-                Colores.HUESO, Colores.VERDE_CLARO, Fuentes.CALENDARIO);
+        PanelTabla tablaCitas = new PanelTabla(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL);
         List<String> listaCitas = controladora.getListaCitas();
         tablaCitas.setElementos(listaCitas);
 
-        PanelCalendario calendario = new PanelCalendario();
-        calendario.setPreferredSize(new Dimension(900, 300));
+        JPanel seccionBotones = new JPanel();
+        GridLayout gridLayout = new GridLayout(2, 3, 20, 10);
+        seccionBotones.setLayout(gridLayout);
+        seccionBotones.setBackground(verdeClaro);
+        seccionBotones.setForeground(verdeClaro);
+        seccionBotones.setOpaque(true);
 
-        JPanel seccionBotones = new JPanel(new GridLayout(1, 4, 8, 0));
-        seccionBotones.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-        seccionBotones.setBackground(verde);
-
-        JButton botonConsultar = new JButton("Consultar Cita");
-        JButton botonModificar = new JButton("Modificar Cita");
         JButton botonBorrar = new JButton("Borrar Cita");
+        JButton botonModificar = new JButton("Modificar Cita");
+        JButton botonConsultar = new JButton("Consultar Cita");
         JButton botonCrear = new JButton("Crear Cita");
+        JButton botonCalendario = new JButton("Ver Calendario");
 
-        for (JButton boton : new JButton[]{botonConsultar, botonModificar, botonBorrar, botonCrear}) {
-            boton.setFont(Fuentes.CALENDARIO);
-            boton.setBackground(verdeOscuro);
-            boton.setForeground(verdeClaro);
-            boton.setFocusPainted(false);
-            seccionBotones.add(boton);
-        }
-
+        botonBorrar.setFont(font);
+        botonBorrar.setBackground(verdeOscuro);
+        botonBorrar.setForeground(verdeClaro);
         botonBorrar.addActionListener(e -> {
             int pos = tablaCitas.getIndiceSeleccionado();
             if (pos == -1) {
@@ -57,18 +49,24 @@ public class PanelCitas extends JPanel {
             }
             try {
                 Window ventana = SwingUtilities.getWindowAncestor(this);
+
                 DialogFormularioCita dialogCita = new DialogFormularioCita(
-                        Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO,
-                        Colores.VERDE_CLARO, Fuentes.GENERAL, "Se ha borrado una cita!", ventana, pos);
+                        Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO,
+                        Fuentes.GENERAL, "Se ha borrado una cita!", ventana, pos);
+
                 controladora.borrarCita(pos);
+
                 tablaCitas.setElementos(controladora.getListaCitas());
-                calendario.actualizar();
                 dialogCita.setVisible(true);
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
+        botonModificar.setFont(font);
+        botonModificar.setBackground(verdeOscuro);
+        botonModificar.setForeground(verdeClaro);
         botonModificar.addActionListener(e -> {
             int pos = tablaCitas.getIndiceSeleccionado();
             if (pos == -1) {
@@ -76,14 +74,20 @@ public class PanelCitas extends JPanel {
                 return;
             }
             Window ventana = SwingUtilities.getWindowAncestor(this);
-            DialogFormularioCita dialogCita = new DialogFormularioCita(
-                    Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO,
-                    Colores.VERDE_CLARO, Fuentes.GENERAL, "Modificar Cita", ventana, pos);
+            DialogFormularioCita dialogCita = new DialogFormularioCita(Colores.VERDE,
+                    Colores.VERDE_OSCURO,
+                    Colores.HUESO,
+                    Colores.VERDE_CLARO,
+                    Fuentes.GENERAL,
+                    "Modificar Cita",
+                    ventana, pos);
             dialogCita.setVisible(true);
             tablaCitas.setElementos(controladora.getListaCitas());
-            calendario.actualizar();
         });
 
+        botonConsultar.setFont(font);
+        botonConsultar.setBackground(verdeOscuro);
+        botonConsultar.setForeground(verdeClaro);
         botonConsultar.addActionListener(e -> {
             int pos = tablaCitas.getIndiceSeleccionado();
             if (pos == -1) {
@@ -91,29 +95,48 @@ public class PanelCitas extends JPanel {
                 return;
             }
             Window ventana = SwingUtilities.getWindowAncestor(this);
-            DialogFormularioCita dialogCita = new DialogFormularioCita(
-                    Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO,
-                    Colores.VERDE_CLARO, Fuentes.GENERAL, "Consultar Cita", ventana, pos);
-            dialogCita.setVisible(true);
-        });
-
-        botonCrear.addActionListener(e -> {
-            Window ventana = SwingUtilities.getWindowAncestor(this);
-            DialogFormularioCita dialogCita = new DialogFormularioCita(
-                    Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO,
-                    Colores.VERDE_CLARO, Fuentes.GENERAL, "Crear Cita", ventana, -1);
+            DialogFormularioCita dialogCita = new DialogFormularioCita(Colores.VERDE,
+                    Colores.VERDE_OSCURO,
+                    Colores.HUESO,
+                    Colores.VERDE_CLARO,
+                    Fuentes.GENERAL,
+                    "Consultar Cita",
+                    ventana, pos);
             dialogCita.setVisible(true);
             tablaCitas.setElementos(controladora.getListaCitas());
-            calendario.actualizar();
         });
 
-        JPanel seccionCitas = new JPanel(new BorderLayout());
-        seccionCitas.setBackground(verde);
-        seccionCitas.add(tablaCitas, BorderLayout.CENTER);
-        seccionCitas.add(seccionBotones, BorderLayout.SOUTH);
+        botonCrear.setFont(font);
+        botonCrear.setBackground(verdeOscuro);
+        botonCrear.setForeground(verdeClaro);
+        botonCrear.addActionListener(e -> {
+            Window ventana = SwingUtilities.getWindowAncestor(this);
+            DialogFormularioCita dialogCita = new DialogFormularioCita(Colores.VERDE,
+                    Colores.VERDE_OSCURO,
+                    Colores.HUESO,
+                    Colores.VERDE_CLARO,
+                    Fuentes.GENERAL,
+                    "Crear Cita",
+                    ventana, -1);
+            dialogCita.setVisible(true);
+            tablaCitas.setElementos(controladora.getListaCitas());
+        });
+
+        botonCalendario.setFont(font);
+        botonCalendario.setBackground(verdeOscuro);
+        botonCalendario.setForeground(verdeClaro);
+        botonCalendario.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "El calendario todavía no está disponible.");
+        });
+
+        seccionBotones.add(botonBorrar);
+        seccionBotones.add(botonModificar);
+        seccionBotones.add(botonConsultar);
+        seccionBotones.add(botonCrear);
+        seccionBotones.add(botonCalendario);
 
         add(titulo, BorderLayout.NORTH);
-        add(seccionCitas, BorderLayout.CENTER);
-        add(calendario, BorderLayout.SOUTH);
+        add(tablaCitas, BorderLayout.CENTER);
+        add(seccionBotones, BorderLayout.SOUTH);
     }
 }
