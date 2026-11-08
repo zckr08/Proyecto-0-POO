@@ -95,7 +95,7 @@ public class Controladora implements Serializable {
 
     // Indica si la cita sigue pendiente: no está cancelada y su fecha no ha pasado
     private boolean estaProgramada(Cita cita) {
-        return cita.getEstado() != EstadoCita.NO_CONFIRMADA
+        return cita.getEstado() != EstadoCita.CANCELADA
                 && !cita.getFechaHora().isBefore(LocalDateTime.now());
     }
 
@@ -118,7 +118,7 @@ public class Controladora implements Serializable {
             throw new Exception("La hora de la cita está fuera del horario de atención.");
         }
         for (Cita cita : citas) {
-            if (cita != citaActual && cita.getEstado() != EstadoCita.NO_CONFIRMADA
+            if (cita != citaActual && cita.getEstado() != EstadoCita.CANCELADA
                     && cita.getFechaHora().equals(fechaHora)) {
                 throw new Exception("Ya existe una cita en esa fecha y hora.");
             }
@@ -225,13 +225,21 @@ public class Controladora implements Serializable {
         return resultado.toString();
     }
 
-    public List<String> getListaClientes() {
-       List<String> resultado = new ArrayList<>();
-       for (Cliente cliente : clientes.values()) {
-           resultado.add(cliente.toString());
-       }
-       return resultado;
-   }
+        public List<String> getListaClientes() {
+        List<String> resultado = new ArrayList<>();
+        for (Cliente cliente : clientes.values()) {
+            resultado.add(cliente.getNombre());
+        }
+        return resultado;
+    }
+
+        public List<String> getListaEsperaClientes() {
+        List<String> resultado = new ArrayList<>();
+        for (Cliente cliente : listaEspera) {
+            resultado.add(cliente.getNombre() + " - " + cliente.getEmail());
+        }
+        return resultado;
+    }
 
     public void crearCita(LocalDateTime fechaHora, Integer posCliente, Servicio servicio) throws Exception {
         Cliente cliente = obtenerCliente(posCliente);
@@ -260,6 +268,49 @@ public class Controladora implements Serializable {
         cita.setFechaHora(fechaHora);
     }
 
+    public void crearCita(LocalDateTime fechaHora, Integer posCliente, Integer posServicio) throws Exception {
+    crearCita(fechaHora, posCliente, obtenerServicio(posServicio));
+    }
+
+    public void modificarCita(Integer posCita, LocalDateTime fechaHora, Integer posServicio) throws Exception {
+        Cita cita = obtenerCita(posCita);
+        Servicio servicio = obtenerServicio(posServicio);
+        if (cita.getFechaHora().equals(fechaHora)) {
+            modificarCita(cita, servicio);
+        } else {
+            modificarCita(cita, fechaHora, servicio);
+        }
+    }
+
+    // Devuelve: fecha, hora, cliente, servicio y estado de la cita (en ese orden)
+    public List<String> obtenerDatosCita(Integer posCita) throws Exception {
+        Cita cita = obtenerCita(posCita);
+        List<String> datos = new ArrayList<>();
+        datos.add(cita.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        datos.add(cita.getFechaHora().format(DateTimeFormatter.ofPattern("HH:mm")));
+        datos.add(cita.getCliente().getNombre());
+        datos.add(cita.getServicio().getDescripcion());
+        if (cita.getEstado() == EstadoCita.CONFIRMADA) {
+            datos.add("Confirmada");
+        } else if (cita.getEstado() == EstadoCita.CANCELADA) {
+            datos.add("Cancelada");
+        } else {
+            datos.add("Sin confirmar");
+        }
+        return datos;
+    }
+
+    public int obtenerPosServicioDeCita(Integer posCita) throws Exception {
+        return servicios.indexOf(obtenerCita(posCita).getServicio());
+    }
+
+    public List<String> getListaServicios() {
+        List<String> resultado = new ArrayList<>();
+        for (Servicio servicio : servicios) {
+            resultado.add(servicio.getDescripcion());
+        }
+        return resultado;
+    }
     public void borrarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
         citas.remove(cita);
@@ -288,16 +339,17 @@ public class Controladora implements Serializable {
     }
 
     public List<String> getListaCitas() {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         List<String> resultado = new ArrayList<>();
         for (Cita cita : citas) {
-            resultado.add(cita.toString());
+            resultado.add(cita.getFechaHora().format(formato) + " | " + cita.getCliente().getNombre());
         }
         return resultado;
     }
 
     public void confirmarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        if (cita.getEstado() == EstadoCita.NO_CONFIRMADA) {
+        if (cita.getEstado() == EstadoCita.CANCELADA) {
             throw new Exception("No se puede confirmar una cita cancelada.");
         }
         if (cita.getEstado() == EstadoCita.CONFIRMADA) {
@@ -308,7 +360,7 @@ public class Controladora implements Serializable {
 
     public void cancelarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        cita.setEstado(EstadoCita.NO_CONFIRMADA);
+        cita.setEstado(EstadoCita.CANCELADA);
     }
 
     public void enviarNotificacion() throws Exception {

@@ -30,6 +30,7 @@ public class DialogFormularioCliente extends JDialog {
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
         titulo.setForeground(verdeClaro);
         titulo.setBackground(verdeOscuro);
+        titulo.setOpaque(true);
         titulo.setFont(font);
 
         JTextField campoNombre = new JTextField();
@@ -110,6 +111,7 @@ public class DialogFormularioCliente extends JDialog {
             if (opcion.equals("Modificar Cliente")) {
                 try {
                     controladora.modificarCliente(index, nombre, email, telefono);
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -118,6 +120,7 @@ public class DialogFormularioCliente extends JDialog {
             else if (opcion.equals("Crear Cliente")) {
                 try {
                     controladora.crearCliente(nombre, email, telefono);
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -138,5 +141,6 @@ public class DialogFormularioCliente extends JDialog {
 
         add(formulario, BorderLayout.CENTER);
         add(titulo, BorderLayout.NORTH);
+        add(botonConfirmar, BorderLayout.SOUTH);
     }
 }
