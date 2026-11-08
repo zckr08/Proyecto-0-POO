@@ -69,7 +69,7 @@ public class DialogFormularioCliente extends JDialog {
         else if (opcion.equals("Consultar Cliente")) {
             campoNombre.setText(datos.get(0));
             campoTelefono.setText(datos.get(1));
-            campoCorreo.setText(datos.get(2));
+            campoCorreo.setText(datos .get(2));
 
             campoNombre.setEditable(false);
             campoTelefono.setEditable(false);

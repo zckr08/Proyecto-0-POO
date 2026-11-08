@@ -56,10 +56,8 @@ public class Controladora implements Serializable {
         return instance;
     }
 
-    private Cliente obtenerCliente(Integer posCliente) throws Exception {
-        if (posCliente == null || posCliente < 0 || posCliente >= clientes.size()) {
-            throw new Exception("La posición del cliente no es válida.");
-        }
+    public Cliente obtenerCliente(Integer posCliente) {
+
         return new ArrayList<>(clientes.values()).get(posCliente);
     }
 
@@ -169,6 +167,14 @@ public class Controladora implements Serializable {
             throw new Exception("Ya existe un cliente con ese email.");
         }
         clientes.put(clave, cliente);
+    }
+
+    public List<String> listaServicios() {
+        List<String> myList = new ArrayList<>();
+        for (Servicio s : servicios) {
+            myList.add(s.toString());
+        }
+        return myList;
     }
 
     public void modificarCliente(Integer posCliente, String nombreCliente, String emailCliente, String numCliente) throws Exception {
@@ -425,6 +431,10 @@ public class Controladora implements Serializable {
             }
         }
         servicios.remove(servicio);
+    }
+
+    public Cita getCita(Integer posCita) {
+        return citas.get(posCita);
     }
 
     public String consultarServicio(Integer posServicio) throws Exception {

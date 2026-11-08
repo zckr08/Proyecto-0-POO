@@ -1,20 +1,24 @@
 package display.dialogs;
 
 import control.Controladora;
-import logic.Cita;
-import logic.Cliente;
+import display.components.PanelTabla;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class DialogFormularioCita extends JDialog {
+    private Integer seleccionCliente;
+    private Integer seleccionServicio;
 
-    public DialogFormularioCita(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Cita cita) {
+    public DialogFormularioCita(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Integer index) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
-
+        seleccionCliente = null;
+        seleccionServicio = null;
         Controladora controladora = Controladora.getInstance();
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
@@ -44,19 +48,44 @@ public class DialogFormularioCita extends JDialog {
         campoEstado.setForeground(verdeOscuro);
 
         if (opcion.equals("Modificar Cita")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
+
+            campoServicio.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JDialog ventanaCambiarServicio = new JDialog();
+                    ventanaCambiarServicio.setSize(756, 369);
+                    ventanaCambiarServicio.setLocationRelativeTo(propietario);
+                    ventanaCambiarServicio.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    ventanaCambiarServicio.setLayout(new BorderLayout());
+
+                    PanelTabla tablaServicio = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
+
+                    JLabel title = new JLabel("Seleccione el servicio para la cita");
+                    ventanaCambiarServicio.add(tablaServicio, BorderLayout.CENTER);
+                    ventanaCambiarServicio.add(title, BorderLayout.NORTH);
+                    tablaServicio.setElementos(controladora.listaServicios());
+                    seleccionServicio = tablaServicio.getIndiceSeleccionado();
+                    try {
+                        campoCliente.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
+                        dispose();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
 
             campoFecha.setEditable(true);
-            campoHora.setEditable(true);
-            campoCliente.setEditable(true);
+            campoCliente.setEditable(false);
             campoServicio.setEditable(true);
+            campoHora.setEditable(true);
             campoEstado.setEditable(true);
         }
 
@@ -67,22 +96,68 @@ public class DialogFormularioCita extends JDialog {
             campoServicio.setText("");
             campoEstado.setText("");
 
+            campoCliente.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JDialog ventanaCambiarCliente = new JDialog();
+                    ventanaCambiarCliente.setSize(756, 369);
+                    ventanaCambiarCliente.setLocationRelativeTo(propietario);
+                    ventanaCambiarCliente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    ventanaCambiarCliente.setLayout(new BorderLayout());
+
+                    PanelTabla tablaCliente = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
+
+                    JLabel title = new JLabel("Seleccione el cliente para la cita");
+                    ventanaCambiarCliente.add(tablaCliente, BorderLayout.CENTER);
+                    ventanaCambiarCliente.add(title, BorderLayout.NORTH);
+                    tablaCliente.setElementos(controladora.getListaClientes());
+                    seleccionCliente = tablaCliente.getIndiceSeleccionado();
+                    campoCliente.setText(controladora.obtenerCliente(seleccionCliente).getNombre());
+                    dispose();
+                }
+            });
+
+            campoServicio.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JDialog ventanaCambiarServicio = new JDialog();
+                    ventanaCambiarServicio.setSize(756, 369);
+                    ventanaCambiarServicio.setLocationRelativeTo(propietario);
+                    ventanaCambiarServicio.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    ventanaCambiarServicio.setLayout(new BorderLayout());
+
+                    PanelTabla tablaServicio = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
+
+                    JLabel title = new JLabel("Seleccione el servicio para la cita");
+                    ventanaCambiarServicio.add(tablaServicio, BorderLayout.CENTER);
+                    ventanaCambiarServicio.add(title, BorderLayout.NORTH);
+                    tablaServicio.setElementos(controladora.listaServicios());
+                    seleccionServicio = tablaServicio.getIndiceSeleccionado();
+                    try {
+                        campoCliente.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
+                        dispose();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+
             campoFecha.setEditable(true);
             campoHora.setEditable(true);
-            campoCliente.setEditable(true);
+            campoCliente.setEditable(false);
             campoServicio.setEditable(true);
             campoEstado.setEditable(true);
         }
 
         else if (opcion.equals("Consultar Cita")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
 
             campoFecha.setEditable(false);
             campoHora.setEditable(false);
@@ -92,14 +167,14 @@ public class DialogFormularioCita extends JDialog {
         }
 
         else if (opcion.equals("Se ha borrado una cita!")) {
-            LocalDateTime fechaHora = cita.getFechaHora();
+            LocalDateTime fechaHora = controladora.getCita(index).getFechaHora();
             LocalDate fecha = fechaHora.toLocalDate();
             LocalTime hora = fechaHora.toLocalTime();
             campoFecha.setText(fecha.toString());
             campoHora.setText(hora.toString());
-            campoCliente.setText(cita.getCliente().getNombre());
-            campoServicio.setText(cita.getServicio().toString());
-            campoEstado.setText(cita.getEstado().toString());
+            campoCliente.setText(controladora.getCita(index).getCliente().getNombre());
+            campoServicio.setText(controladora.getCita(index).getServicio().toString());
+            campoEstado.setText(controladora.getCita(index).getEstado().toString());
 
             campoFecha.setEditable(false);
             campoHora.setEditable(false);
@@ -126,15 +201,17 @@ public class DialogFormularioCita extends JDialog {
         botonConfirmar.setForeground(verdeClaro);
 
         botonConfirmar.addActionListener(e -> {
-            String fecha = campoFecha.getText();
-            String hora = campoHora.getText();
+            CharSequence fecha = campoFecha.getText();
+            CharSequence hora = campoHora.getText();
+            LocalDateTime fechaHora = LocalDateTime.of(LocalDate.parse(fecha), LocalTime.parse(hora));
             String cliente = campoCliente.getText();
             String servicio = campoServicio.getText();
             String estado = campoEstado.getText();
 
             if (opcion.equals("Modificar Cita")) {
                 try {
-                    controladora.
+                    controladora.modificarCita(controladora.getCita(index), fechaHora, seleccionServicio != null ?  controladora.obtenerServicio(seleccionServicio) : controladora.getCita(index).getServicio());
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -142,7 +219,8 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Crear Cita")) {
                 try {
-                    controladora.
+                    controladora.crearCita(fechaHora, seleccionCliente, controladora.obtenerServicio(seleccionServicio));
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -150,7 +228,7 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Consultar Cita")) {
                 try {
-                    controladora.
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -158,7 +236,7 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Se ha borrado una cita!")) {
                 try {
-                    controladora.
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }

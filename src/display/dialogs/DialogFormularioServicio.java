@@ -11,7 +11,7 @@ import java.time.LocalTime;
 
 public class DialogFormularioServicio extends JDialog {
 
-    public DialogFormularioServicio(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Servicio servicio) {
+    public DialogFormularioServicio(Color verde, Color verdeOscuro, Color hueso, Color verdeClaro, Font font, String opcion, Window propietario, Integer index) {
         super(propietario, opcion, ModalityType.APPLICATION_MODAL);
 
         Controladora controladora = Controladora.getInstance();
@@ -26,26 +26,38 @@ public class DialogFormularioServicio extends JDialog {
         campoDescripcion.setFont(font);
         campoDescripcion.setForeground(verdeOscuro);
 
-        if (opcion.equals("Modificar Cita")) {
-            campoDescripcion.setText(servicio.getDescripcion());
+        if (opcion.equals("Modificar servicio")) {
+            try {
+                campoDescripcion.setText(controladora.obtenerServicio(index).getDescripcion());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
             campoDescripcion.setEditable(true);
         }
 
-        else if (opcion.equals("Crear Cita")) {
+        else if (opcion.equals("Crear servicio")) {
             campoDescripcion.setText("");
 
             campoDescripcion.setEditable(true);
         }
 
-        else if (opcion.equals("Consultar Cita")) {
-            campoDescripcion.setText(servicio.getDescripcion());
+        else if (opcion.equals("Consultar servicio")) {
+            try {
+                campoDescripcion.setText(controladora.obtenerServicio(index).getDescripcion());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
             campoDescripcion.setEditable(false);
         }
 
-        else if (opcion.equals("Se ha borrado una cita!")) {
-            campoDescripcion.setText(servicio.getDescripcion());
+        else if (opcion.equals("Se ha borrado un servicio!")) {
+            try {
+                campoDescripcion.setText(controladora.obtenerServicio(index).getDescripcion());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
             campoDescripcion.setEditable(false);
         }
@@ -72,7 +84,8 @@ public class DialogFormularioServicio extends JDialog {
 
             if (opcion.equals("Modificar Servicio")) {
                 try {
-                    controladora.
+                    controladora.modificarServicio(index, descripcion);
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -80,7 +93,8 @@ public class DialogFormularioServicio extends JDialog {
 
             else if (opcion.equals("Crear Servicio")) {
                 try {
-                    controladora.
+                    controladora.crearServicio(descripcion);
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -88,7 +102,7 @@ public class DialogFormularioServicio extends JDialog {
 
             else if (opcion.equals("Consultar Servicio")) {
                 try {
-                    controladora.
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -96,7 +110,7 @@ public class DialogFormularioServicio extends JDialog {
 
             else if (opcion.equals("Se ha borrado un servicio!")) {
                 try {
-                    controladora.
+                    dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
