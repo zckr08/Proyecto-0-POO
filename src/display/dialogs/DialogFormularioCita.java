@@ -32,7 +32,7 @@ public class DialogFormularioCita extends JDialog {
         JTextField campoHora = new JTextField();
         JTextField campoCliente = new JTextField();
         JTextField campoServicio = new JTextField();
-        JTextField campoEstado = new JTextField();
+        JLabel campoEstado = new JLabel();
 
         campoFecha.setFont(font);
         campoFecha.setForeground(verdeOscuro);
@@ -88,7 +88,6 @@ public class DialogFormularioCita extends JDialog {
             campoCliente.setEditable(false);
             campoServicio.setEditable(true);
             campoHora.setEditable(true);
-            campoEstado.setEditable(true);
         }
 
         else if (opcion.equals("Crear Cita")) {
@@ -96,7 +95,6 @@ public class DialogFormularioCita extends JDialog {
             campoHora.setText("");
             campoCliente.setText("");
             campoServicio.setText("");
-            campoEstado.setText("");
 
             campoCliente.addMouseListener(new MouseAdapter() {
                 @Override
@@ -181,7 +179,6 @@ public class DialogFormularioCita extends JDialog {
             campoHora.setEditable(true);
             campoCliente.setEditable(false);
             campoServicio.setEditable(true);
-            campoEstado.setEditable(true);
         }
 
         else if (opcion.equals("Consultar Cita")) {
@@ -198,7 +195,6 @@ public class DialogFormularioCita extends JDialog {
             campoHora.setEditable(false);
             campoCliente.setEditable(false);
             campoServicio.setEditable(false);
-            campoEstado.setEditable(false);
         }
 
         else if (opcion.equals("Se ha borrado una cita!")) {
@@ -215,7 +211,6 @@ public class DialogFormularioCita extends JDialog {
             campoHora.setEditable(false);
             campoCliente.setEditable(false);
             campoServicio.setEditable(false);
-            campoEstado.setEditable(false);
         }
 
         setSize(756, 369);
@@ -225,11 +220,13 @@ public class DialogFormularioCita extends JDialog {
         setLayout(new BorderLayout());
 
 
-        JPanel formulario = new JPanel(new GridLayout(3,2,10,15));
+        boolean esCrear = opcion.equals("Crear Cita");
+        JPanel formulario = new JPanel(new GridLayout(esCrear ? 4 : 5, 2, 10, 15));
 
         formulario.setBackground(verdeClaro);
 
         JButton botonConfirmar = new JButton("Confirmar");
+
 
         botonConfirmar.setFont(font);
         botonConfirmar.setBackground(verdeOscuro);
@@ -241,7 +238,6 @@ public class DialogFormularioCita extends JDialog {
             LocalDateTime fechaHora = LocalDateTime.of(LocalDate.parse(fecha), LocalTime.parse(hora));
             String cliente = campoCliente.getText();
             String servicio = campoServicio.getText();
-            String estado = campoEstado.getText();
 
             if (opcion.equals("Modificar Cita")) {
                 try {
@@ -282,6 +278,35 @@ public class DialogFormularioCita extends JDialog {
             }
         });
 
+        JButton botonConfirmarCita = new JButton("Confirmar cita");
+        JButton botonCancelarCita = new JButton("Cancelar cita");
+
+        botonConfirmarCita.setFont(font);
+        botonConfirmarCita.setBackground(verdeOscuro);
+        botonConfirmarCita.setForeground(verdeClaro);
+
+        botonCancelarCita.setFont(font);
+        botonCancelarCita.setBackground(verdeOscuro);
+        botonCancelarCita.setForeground(verdeClaro);
+
+        botonConfirmarCita.addActionListener(e -> {
+            try {
+                controladora.confirmarCita(index);
+                campoEstado.setText(controladora.getCita(index).getEstado().toString());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        botonCancelarCita.addActionListener(e -> {
+            try {
+                controladora.cancelarCita(index);
+                campoEstado.setText(controladora.getCita(index).getEstado().toString());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         formulario.add(new JLabel("Fecha:"));
         formulario.add(campoFecha);
         formulario.add(new JLabel("Hora:"));
@@ -290,12 +315,24 @@ public class DialogFormularioCita extends JDialog {
         formulario.add(campoCliente);
         formulario.add(new JLabel("Servicio: "));
         formulario.add(campoServicio);
-        formulario.add(new JLabel("Estado: "));
-        formulario.add(campoEstado);
+        if (!esCrear) {
+            formulario.add(new JLabel("Estado: "));
+            formulario.add(campoEstado);
+        }
 
         add(formulario, BorderLayout.CENTER);
         add(titulo, BorderLayout.NORTH);
-        add(botonConfirmar, BorderLayout.SOUTH);
+        if (opcion.equals("Modificar Cita")) {
+            JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
+            panelBotones.setBackground(verdeClaro);
+            panelBotones.add(botonConfirmarCita);
+            panelBotones.add(botonCancelarCita);
+            panelBotones.add(botonConfirmar);
+            add(panelBotones, BorderLayout.SOUTH);
+        }
+        else {
+            add(botonConfirmar, BorderLayout.SOUTH);
+        }
     }
 }
 

@@ -32,7 +32,7 @@ public class PanelInferior extends JPanel {
 
         botonHorario.addActionListener(e -> {
             Window ventana = SwingUtilities.getWindowAncestor(this);
-            DialogEstablecerHorario dialogHorario = new DialogEstablecerHorario();
+            DialogEstablecerHorario dialogHorario = new DialogEstablecerHorario(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.TEXTO, Fuentes.GENERAL, "Establecer horario", ventana);
             dialogHorario.setVisible(true);
         });
 
