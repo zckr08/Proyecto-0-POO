@@ -16,6 +16,10 @@ public class PanelCitas extends JPanel {
         Controladora controladora = Controladora.getInstance();
         setLayout(new BorderLayout());
         JLabel titulo = new JLabel("Menu de citas", SwingConstants.CENTER);
+        titulo.setOpaque(true);
+        titulo.setBackground(verdeOscuro);
+        titulo.setForeground(verdeClaro);
+        titulo.setFont(font);
 
         PanelTabla tablaCitas = new PanelTabla(Colores.VERDE, Colores.VERDE_OSCURO, Colores.HUESO, Colores.VERDE_CLARO, Fuentes.GENERAL);
         List<String> listaCitas = controladora.getListaCitas();
