@@ -134,7 +134,7 @@ public class DialogFormularioCita extends JDialog {
 
             if (opcion.equals("Modificar Cita")) {
                 try {
-                    // controladora.   <- PENDIENTE: completar la llamada a la Controladora
+                    controladora.
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -142,7 +142,7 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Crear Cita")) {
                 try {
-                    // controladora.   <- PENDIENTE: completar la llamada a la Controladora
+                    controladora.
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -150,7 +150,7 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Consultar Cita")) {
                 try {
-                    // controladora.   <- PENDIENTE: completar la llamada a la Controladora
+                    controladora.
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -158,7 +158,7 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Se ha borrado una cita!")) {
                 try {
-                    // controladora.   <- PENDIENTE: completar la llamada a la Controladora
+                    controladora.
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
