@@ -12,6 +12,8 @@ import java.awt.*;
 public class PanelInferior extends JPanel {
 
     public PanelInferior() {
+        setBackground(Colores.VERDE);
+
         JButton botonHorario = new JButton("Horario");
         JButton botonSalir = new JButton("Salir");
         JButton botonNotificar = new JButton("Notificar");

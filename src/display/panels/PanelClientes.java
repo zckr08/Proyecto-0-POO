@@ -33,7 +33,8 @@ public class PanelClientes extends JPanel {
         JPanel seccionBotones = new JPanel();
         GridLayout gridLayout = new GridLayout(2, 2, 20, 10);
         seccionBotones.setLayout(gridLayout);
-        seccionBotones.setOpaque(false);
+        seccionBotones.setBackground(verdeClaro);
+        seccionBotones.setOpaque(true);
 
         JButton botonBorrar = new JButton("Borrar Cliente");
         JButton botonModificar = new JButton("Modificar Cliente");

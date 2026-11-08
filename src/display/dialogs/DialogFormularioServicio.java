@@ -19,6 +19,7 @@ public class DialogFormularioServicio extends JDialog {
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
         titulo.setForeground(verdeClaro);
         titulo.setBackground(verdeOscuro);
+        titulo.setOpaque(true);
         titulo.setFont(font);
 
         JTextField campoDescripcion = new JTextField();
@@ -122,6 +123,7 @@ public class DialogFormularioServicio extends JDialog {
 
         add(formulario, BorderLayout.CENTER);
         add(titulo, BorderLayout.NORTH);
+        add(botonConfirmar, BorderLayout.SOUTH);
     }
 }
 

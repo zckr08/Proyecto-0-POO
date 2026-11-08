@@ -22,9 +22,11 @@ public class DialogFormularioCita extends JDialog {
         Controladora controladora = Controladora.getInstance();
 
         JLabel titulo = new JLabel(opcion, SwingConstants.CENTER);
-        titulo.setForeground(verdeClaro);
-        titulo.setBackground(verdeOscuro);
         titulo.setFont(font);
+        titulo.setOpaque(true);
+        titulo.setBackground(verdeOscuro);
+        titulo.setForeground(verdeClaro);
+
 
         JTextField campoFecha = new JTextField();
         JTextField campoHora = new JTextField();
@@ -74,8 +76,8 @@ public class DialogFormularioCita extends JDialog {
                     tablaServicio.setElementos(controladora.listaServicios());
                     seleccionServicio = tablaServicio.getIndiceSeleccionado();
                     try {
-                        campoCliente.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
-                        dispose();
+                        campoServicio.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
+                        ventanaCambiarServicio.dispose();
                     } catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }
@@ -99,28 +101,46 @@ public class DialogFormularioCita extends JDialog {
             campoCliente.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    JDialog ventanaCambiarCliente = new JDialog();
+                    JDialog ventanaCambiarCliente = new JDialog(propietario, "Seleccione un cliente", Dialog.ModalityType.APPLICATION_MODAL);
                     ventanaCambiarCliente.setSize(756, 369);
                     ventanaCambiarCliente.setLocationRelativeTo(propietario);
                     ventanaCambiarCliente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                     ventanaCambiarCliente.setLayout(new BorderLayout());
 
                     PanelTabla tablaCliente = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
+                    JButton botonSeleccionar = new JButton("Seleccionar");
+                    botonSeleccionar.setFont(font);
+                    botonSeleccionar.setBackground(verdeOscuro);
+                    botonSeleccionar.setForeground(verdeClaro);
+                    botonSeleccionar.addActionListener(ev -> {seleccionCliente = tablaCliente.getIndiceSeleccionado();
+                        if (seleccionCliente != -1) {
+                            campoCliente.setText(controladora.obtenerCliente(seleccionCliente).getNombre());
+                            ventanaCambiarCliente.dispose();
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(ventanaCambiarCliente, "Seleccione un cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        }
+                    });
+
+                    ventanaCambiarCliente.add(botonSeleccionar, BorderLayout.SOUTH);
 
                     JLabel title = new JLabel("Seleccione el cliente para la cita");
                     ventanaCambiarCliente.add(tablaCliente, BorderLayout.CENTER);
                     ventanaCambiarCliente.add(title, BorderLayout.NORTH);
                     tablaCliente.setElementos(controladora.getListaClientes());
-                    seleccionCliente = tablaCliente.getIndiceSeleccionado();
-                    campoCliente.setText(controladora.obtenerCliente(seleccionCliente).getNombre());
-                    dispose();
+                    ventanaCambiarCliente.setVisible(true);
                 }
             });
 
             campoServicio.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    JDialog ventanaCambiarServicio = new JDialog();
+                    JDialog ventanaCambiarServicio = new JDialog(
+                            propietario,
+                            "Seleccione un servicio",
+                            Dialog.ModalityType.APPLICATION_MODAL
+                    );
+
                     ventanaCambiarServicio.setSize(756, 369);
                     ventanaCambiarServicio.setLocationRelativeTo(propietario);
                     ventanaCambiarServicio.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -128,17 +148,32 @@ public class DialogFormularioCita extends JDialog {
 
                     PanelTabla tablaServicio = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
 
+                    JButton botonSeleccionar = new JButton("Seleccionar");
+                    botonSeleccionar.setFont(font);
+                    botonSeleccionar.setBackground(verdeOscuro);
+                    botonSeleccionar.setForeground(verdeClaro);
+
+                    botonSeleccionar.addActionListener(ev -> {
+                        seleccionServicio = tablaServicio.getIndiceSeleccionado();
+
+                        if (seleccionServicio != -1) {
+                            try {
+                                campoServicio.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
+                                ventanaCambiarServicio.dispose();
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(ventanaCambiarServicio, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(ventanaCambiarServicio, "Seleccione un servicio.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        }
+                    });
+                    ventanaCambiarServicio.add(botonSeleccionar, BorderLayout.SOUTH);
                     JLabel title = new JLabel("Seleccione el servicio para la cita");
                     ventanaCambiarServicio.add(tablaServicio, BorderLayout.CENTER);
                     ventanaCambiarServicio.add(title, BorderLayout.NORTH);
                     tablaServicio.setElementos(controladora.listaServicios());
-                    seleccionServicio = tablaServicio.getIndiceSeleccionado();
-                    try {
-                        campoCliente.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
-                        dispose();
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    ventanaCambiarServicio.setVisible(true);
                 }
             });
 
@@ -210,7 +245,11 @@ public class DialogFormularioCita extends JDialog {
 
             if (opcion.equals("Modificar Cita")) {
                 try {
-                    controladora.modificarCita(controladora.getCita(index), fechaHora, seleccionServicio != null ?  controladora.obtenerServicio(seleccionServicio) : controladora.getCita(index).getServicio());
+                    if (seleccionServicio != null) {
+                        controladora.modificarCita(index, fechaHora, seleccionServicio);
+                    } else {
+                        controladora.modificarCita(controladora.getCita(index), fechaHora);
+                    }
                     dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -256,6 +295,7 @@ public class DialogFormularioCita extends JDialog {
 
         add(formulario, BorderLayout.CENTER);
         add(titulo, BorderLayout.NORTH);
+        add(botonConfirmar, BorderLayout.SOUTH);
     }
 }
 

@@ -29,7 +29,8 @@ public class PanelServicios extends JPanel {
         tablaServicios.setElementos(descripciones);
 
         JPanel seccionBotones = new JPanel(new GridLayout(2, 2, 20, 10));
-        seccionBotones.setOpaque(false);
+        seccionBotones.setBackground(verde);
+        seccionBotones.setOpaque(true);
 
         JButton botonBorrar = new JButton("Borrar Servicio");
         JButton botonModificar = new JButton("Modificar Servicio");

@@ -17,8 +17,13 @@ public class PanelListaEspera extends JPanel {
         JButton botonEliminarDeLaLista = new JButton("Eliminar de la lista");
         JButton botonAgregarALista = new JButton("Agregar a la lista");
         JLabel titulo = new JLabel("Menu Lista De Espera", SwingConstants.CENTER);
-        botonAgregarALista.setBackground(verdeOscuro);
+        titulo.setFont(font);
+        titulo.setOpaque(true);
+        titulo.setForeground(verdeClaro);
+        titulo.setBackground(verdeOscuro);
         botonAgregarALista.setFont(font);
+        botonAgregarALista.setOpaque(true);
+        botonAgregarALista.setBackground(verdeOscuro);
         botonAgregarALista.setForeground(verdeClaro);
 
         botonEliminarDeLaLista.setBackground(verdeOscuro);

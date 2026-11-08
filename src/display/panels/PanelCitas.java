@@ -28,7 +28,9 @@ public class PanelCitas extends JPanel {
         JPanel seccionBotones = new JPanel();
         GridLayout gridLayout = new GridLayout(2, 3, 20, 10);
         seccionBotones.setLayout(gridLayout);
-        seccionBotones.setOpaque(false);
+        seccionBotones.setBackground(verdeClaro);
+        seccionBotones.setForeground(verdeClaro);
+        seccionBotones.setOpaque(true);
 
         JButton botonBorrar = new JButton("Borrar Cita");
         JButton botonModificar = new JButton("Modificar Cita");
