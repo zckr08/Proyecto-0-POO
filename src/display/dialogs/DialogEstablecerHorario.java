@@ -66,30 +66,35 @@ public class DialogEstablecerHorario extends JDialog {
             try {
                 LocalDate fecha = LocalDate.now();
 
+                LocalTime horaApertura;
+                LocalTime horaCierre;
                 for (int i = 0; i < 7; i++) {
                     String apertura = camposHorario[i][0].getText().trim();
                     String cierre = camposHorario[i][1].getText().trim();
 
                     if (apertura.isEmpty() && cierre.isEmpty()) {
-                        continue;
+                        horaApertura = null;
+                        horaCierre = null;
                     }
 
-                    if (apertura.isEmpty() || cierre.isEmpty()) {
+                    if (apertura.isEmpty() ^ cierre.isEmpty()) {
                         throw new Exception("Complete ambas horas para " + diasSemana[i] + ".");
                     }
 
-                    LocalTime horaApertura = LocalTime.parse(apertura);
-                    LocalTime horaCierre = LocalTime.parse(cierre);
+                    if (!apertura.isEmpty() && !cierre.isEmpty()) {
+                        horaApertura = LocalTime.parse(apertura);
+                        horaCierre = LocalTime.parse(cierre);
 
-                    LocalDateTime fechaApertura = LocalDateTime.of(fecha, horaApertura);
-                    LocalDateTime fechaCierre = LocalDateTime.of(fecha, horaCierre);
+                        LocalDateTime fechaApertura = LocalDateTime.of(fecha, horaApertura);
+                        LocalDateTime fechaCierre = LocalDateTime.of(fecha, horaCierre);
 
-                    int numDia = (i == 0) ? 7 : i;
+                        int numDia = (i == 0) ? 7 : i;
 
-                    controladora.establecerHorario(numDia, fechaApertura, fechaCierre);
+                        controladora.establecerHorario(numDia, fechaApertura, fechaCierre);
+                    }
+
+                    dispose();
                 }
-
-                dispose();
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Verifique las horas ingresadas.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

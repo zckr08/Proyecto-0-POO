@@ -62,7 +62,12 @@ public class DialogFormularioCita extends JDialog {
             campoServicio.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    JDialog ventanaCambiarServicio = new JDialog();
+                    JDialog ventanaCambiarServicio = new JDialog(
+                            propietario,
+                            "Seleccione un servicio",
+                            Dialog.ModalityType.APPLICATION_MODAL
+                    );
+
                     ventanaCambiarServicio.setSize(756, 369);
                     ventanaCambiarServicio.setLocationRelativeTo(propietario);
                     ventanaCambiarServicio.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -70,32 +75,46 @@ public class DialogFormularioCita extends JDialog {
 
                     PanelTabla tablaServicio = new PanelTabla(verde, verdeOscuro, hueso, verdeClaro, font);
 
+                    JButton botonSeleccionar = new JButton("Seleccionar");
+                    botonSeleccionar.setFont(font);
+                    botonSeleccionar.setBackground(verdeOscuro);
+                    botonSeleccionar.setForeground(verdeClaro);
+
+                    botonSeleccionar.addActionListener(ev -> {
+                        seleccionServicio = tablaServicio.getIndiceSeleccionado();
+
+                        if (seleccionServicio != -1) {
+                            try {
+                                campoServicio.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
+                                ventanaCambiarServicio.dispose();
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(ventanaCambiarServicio, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(ventanaCambiarServicio, "Seleccione un servicio.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        }
+                    });
+                    ventanaCambiarServicio.add(botonSeleccionar, BorderLayout.SOUTH);
                     JLabel title = new JLabel("Seleccione el servicio para la cita");
                     ventanaCambiarServicio.add(tablaServicio, BorderLayout.CENTER);
                     ventanaCambiarServicio.add(title, BorderLayout.NORTH);
                     tablaServicio.setElementos(controladora.listaServicios());
                     ventanaCambiarServicio.setVisible(true);
-                    seleccionServicio = tablaServicio.getIndiceSeleccionado();
-                    try {
-                        campoServicio.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
-                        ventanaCambiarServicio.dispose();
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
                 }
             });
 
             campoFecha.setEditable(true);
             campoCliente.setEditable(false);
-            campoServicio.setEditable(true);
+            campoServicio.setEditable(false);
             campoHora.setEditable(true);
         }
 
         else if (opcion.equals("Crear Cita")) {
             campoFecha.setText("");
             campoHora.setText("");
-            campoCliente.setText("Clickeeme para seleccionar cliente");
-            campoServicio.setText("Clickeeme para seleccionar servicio");
+            campoCliente.setText("seleccionar cliente");
+            campoServicio.setText("seleccionar servicio");
 
             campoCliente.addMouseListener(new MouseAdapter() {
                 @Override
@@ -226,7 +245,7 @@ public class DialogFormularioCita extends JDialog {
 
         formulario.setBackground(verdeClaro);
 
-        JButton botonConfirmar = new JButton("Confirmar");
+        JButton botonConfirmar = new JButton("Aceptar");
 
 
         botonConfirmar.setFont(font);
@@ -291,28 +310,14 @@ public class DialogFormularioCita extends JDialog {
         });
 
         JButton botonConfirmarCita = new JButton("Confirmar cita");
-        JButton botonCancelarCita = new JButton("Cancelar cita");
 
         botonConfirmarCita.setFont(font);
         botonConfirmarCita.setBackground(verdeOscuro);
         botonConfirmarCita.setForeground(verdeClaro);
 
-        botonCancelarCita.setFont(font);
-        botonCancelarCita.setBackground(verdeOscuro);
-        botonCancelarCita.setForeground(verdeClaro);
-
         botonConfirmarCita.addActionListener(e -> {
             try {
                 controladora.confirmarCita(index);
-                campoEstado.setText(controladora.getCita(index).getEstado().toString());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        botonCancelarCita.addActionListener(e -> {
-            try {
-                controladora.cancelarCita(index);
                 campoEstado.setText(controladora.getCita(index).getEstado().toString());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -338,7 +343,6 @@ public class DialogFormularioCita extends JDialog {
             JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
             panelBotones.setBackground(verdeClaro);
             panelBotones.add(botonConfirmarCita);
-            panelBotones.add(botonCancelarCita);
             panelBotones.add(botonConfirmar);
             add(panelBotones, BorderLayout.SOUTH);
         }
