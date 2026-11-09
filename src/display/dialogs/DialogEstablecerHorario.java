@@ -47,8 +47,8 @@ public class DialogEstablecerHorario extends JDialog {
         formulario.setBackground(verdeClaro);
 
         formulario.add(new JLabel("Día"));
-        formulario.add(new JLabel("Hora de apertura"));
-        formulario.add(new JLabel("Hora de cierre"));
+        formulario.add(new JLabel("Hora de apertura (HH:mm)"));
+        formulario.add(new JLabel("Hora de cierre (HH:mm)"));
 
         for (int i = 0; i < 7; i++) {
             formulario.add(new JLabel(diasSemana[i]));

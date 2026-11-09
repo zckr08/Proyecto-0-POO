@@ -74,6 +74,7 @@ public class DialogFormularioCita extends JDialog {
                     ventanaCambiarServicio.add(tablaServicio, BorderLayout.CENTER);
                     ventanaCambiarServicio.add(title, BorderLayout.NORTH);
                     tablaServicio.setElementos(controladora.listaServicios());
+                    ventanaCambiarServicio.setVisible(true);
                     seleccionServicio = tablaServicio.getIndiceSeleccionado();
                     try {
                         campoServicio.setText(controladora.obtenerServicio(seleccionServicio).getDescripcion());
@@ -93,8 +94,8 @@ public class DialogFormularioCita extends JDialog {
         else if (opcion.equals("Crear Cita")) {
             campoFecha.setText("");
             campoHora.setText("");
-            campoCliente.setText("");
-            campoServicio.setText("");
+            campoCliente.setText("Clickeeme para seleccionar cliente");
+            campoServicio.setText("Clickeeme para seleccionar servicio");
 
             campoCliente.addMouseListener(new MouseAdapter() {
                 @Override
@@ -178,7 +179,7 @@ public class DialogFormularioCita extends JDialog {
             campoFecha.setEditable(true);
             campoHora.setEditable(true);
             campoCliente.setEditable(false);
-            campoServicio.setEditable(true);
+            campoServicio.setEditable(false);
         }
 
         else if (opcion.equals("Consultar Cita")) {
@@ -233,11 +234,20 @@ public class DialogFormularioCita extends JDialog {
         botonConfirmar.setForeground(verdeClaro);
 
         botonConfirmar.addActionListener(e -> {
-            CharSequence fecha = campoFecha.getText();
-            CharSequence hora = campoHora.getText();
-            LocalDateTime fechaHora = LocalDateTime.of(LocalDate.parse(fecha), LocalTime.parse(hora));
-            String cliente = campoCliente.getText();
-            String servicio = campoServicio.getText();
+            LocalDate fecha;
+            LocalTime hora;
+            LocalDateTime fechaHora = null;
+            String cliente;
+            String servicio;
+            try {
+                fecha = LocalDate.parse(campoFecha.getText());
+                hora = LocalTime.parse(campoHora.getText());
+                fechaHora = fecha.atTime(hora);
+                cliente = campoCliente.getText();
+                servicio = campoServicio.getText();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
             if (opcion.equals("Modificar Cita")) {
                 try {
@@ -254,6 +264,8 @@ public class DialogFormularioCita extends JDialog {
 
             else if (opcion.equals("Crear Cita")) {
                 try {
+                    if (seleccionCliente == null || seleccionServicio == null)
+                        throw new Exception("Al crear una nueva cita tiene que seleccionarse un servicio y un cliente");
                     controladora.crearCita(fechaHora, seleccionCliente, controladora.obtenerServicio(seleccionServicio));
                     dispose();
                 } catch (Exception ex) {
@@ -307,9 +319,9 @@ public class DialogFormularioCita extends JDialog {
             }
         });
 
-        formulario.add(new JLabel("Fecha:"));
+        formulario.add(new JLabel("Fecha (aaaa-mm-dd):"));
         formulario.add(campoFecha);
-        formulario.add(new JLabel("Hora:"));
+        formulario.add(new JLabel("Hora(HH:mm):"));
         formulario.add(campoHora);
         formulario.add(new JLabel("Cliente: "));
         formulario.add(campoCliente);
