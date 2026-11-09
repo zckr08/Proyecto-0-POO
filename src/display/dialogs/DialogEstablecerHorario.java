@@ -27,15 +27,22 @@ public class DialogEstablecerHorario extends JDialog {
         titulo.setOpaque(true);
         titulo.setFont(font);
 
-        for (int i = 0; i < 7; i++) {
-            camposHorario[i][0] = new JTextField();
-            camposHorario[i][1] = new JTextField();
-
-            camposHorario[i][0].setFont(font);
-            camposHorario[i][0].setForeground(verdeOscuro);
-
-            camposHorario[i][1].setFont(font);
-            camposHorario[i][1].setForeground(verdeOscuro);
+        try {
+            for (int i = 0; i < 7; i++) {
+                camposHorario[i][0] = new JTextField();
+                camposHorario[i][1] = new JTextField();
+                int numDia = (i == 0) ? 7 : i;
+                camposHorario[i][0].setText(controladora.consultarHoraApertura(numDia));
+                camposHorario[i][1].setText(controladora.consultarHoraCierre(numDia));
+                camposHorario[i][0].setFont(font);
+                camposHorario[i][0].setForeground(verdeOscuro);
+                camposHorario[i][1].setFont(font);
+                camposHorario[i][1].setForeground(verdeOscuro);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
         }
 
         setSize(756, 500);
@@ -47,8 +54,8 @@ public class DialogEstablecerHorario extends JDialog {
         formulario.setBackground(verdeClaro);
 
         formulario.add(new JLabel("Día"));
-        formulario.add(new JLabel("Hora de apertura"));
-        formulario.add(new JLabel("Hora de cierre"));
+        formulario.add(new JLabel("Hora de apertura (HH:mm)"));
+        formulario.add(new JLabel("Hora de cierre (HH:mm)"));
 
         for (int i = 0; i < 7; i++) {
             formulario.add(new JLabel(diasSemana[i]));
@@ -65,32 +72,23 @@ public class DialogEstablecerHorario extends JDialog {
         botonConfirmar.addActionListener(e -> {
             try {
                 LocalDate fecha = LocalDate.now();
-
                 for (int i = 0; i < 7; i++) {
                     String apertura = camposHorario[i][0].getText().trim();
                     String cierre = camposHorario[i][1].getText().trim();
-
-                    if (apertura.isEmpty() && cierre.isEmpty()) {
-                        continue;
-                    }
-
-                    if (apertura.isEmpty() || cierre.isEmpty()) {
-                        throw new Exception("Complete ambas horas para " + diasSemana[i] + ".");
-                    }
-
-                    LocalTime horaApertura = LocalTime.parse(apertura);
-                    LocalTime horaCierre = LocalTime.parse(cierre);
-
-                    LocalDateTime fechaApertura = LocalDateTime.of(fecha, horaApertura);
-                    LocalDateTime fechaCierre = LocalDateTime.of(fecha, horaCierre);
-
                     int numDia = (i == 0) ? 7 : i;
-
-                    controladora.establecerHorario(numDia, fechaApertura, fechaCierre);
+                    if (apertura.isEmpty() && cierre.isEmpty()) {
+                        controladora.eliminarHorario(numDia);
+                    } else if (apertura.isEmpty() || cierre.isEmpty()) {
+                        throw new Exception("Complete ambas horas para " + diasSemana[i] + ".");
+                    } else {
+                        LocalTime horaApertura = LocalTime.parse(apertura);
+                        LocalTime horaCierre = LocalTime.parse(cierre);
+                        LocalDateTime fechaApertura = LocalDateTime.of(fecha, horaApertura);
+                        LocalDateTime fechaCierre = LocalDateTime.of(fecha, horaCierre);
+                        controladora.establecerHorario(numDia, fechaApertura, fechaCierre);
+                    }
                 }
-
                 dispose();
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Verifique las horas ingresadas.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }

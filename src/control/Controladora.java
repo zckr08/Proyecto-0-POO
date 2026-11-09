@@ -41,7 +41,7 @@ public class Controladora implements Serializable {
     private List<Cliente> listaEspera;
     private Map<String, Cliente> clientes;
     private static final String CORREO_EMISOR = "mmmusecuts@gmail.com";
-    private static final String CLAVE_CORREO = "zciryncmvqhwpego";
+    private static final String CLAVE_CORREO = "hqrcximgznbbxdvy";
 
     private Controladora(){
         citas = new ArrayList<>();
@@ -93,8 +93,7 @@ public class Controladora implements Serializable {
 
     // Indica si la cita sigue pendiente: no está cancelada y su fecha no ha pasado
     private boolean estaProgramada(Cita cita) {
-        return cita.getEstado() != EstadoCita.CANCELADA
-                && !cita.getFechaHora().isBefore(LocalDateTime.now());
+        return !cita.getFechaHora().isBefore(LocalDateTime.now());
     }
 
     // Indica si hay un horario de atención establecido para el día de la semana de la fecha
@@ -116,8 +115,7 @@ public class Controladora implements Serializable {
             throw new Exception("La hora de la cita está fuera del horario de atención.");
         }
         for (Cita cita : citas) {
-            if (cita != citaActual && cita.getEstado() != EstadoCita.CANCELADA
-                    && cita.getFechaHora().equals(fechaHora)) {
+            if (cita != citaActual && cita.getFechaHora().equals(fechaHora)) {
                 throw new Exception("Ya existe una cita en esa fecha y hora.");
             }
         }
@@ -298,8 +296,6 @@ public class Controladora implements Serializable {
         datos.add(cita.getServicio().getDescripcion());
         if (cita.getEstado() == EstadoCita.CONFIRMADA) {
             datos.add("Confirmada");
-        } else if (cita.getEstado() == EstadoCita.CANCELADA) {
-            datos.add("Cancelada");
         } else {
             datos.add("Sin confirmar");
         }
@@ -355,9 +351,6 @@ public class Controladora implements Serializable {
 
     public void confirmarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        if (cita.getEstado() == EstadoCita.CANCELADA) {
-            throw new Exception("No se puede confirmar una cita cancelada.");
-        }
         if (cita.getEstado() == EstadoCita.CONFIRMADA) {
             throw new Exception("La cita ya está confirmada.");
         }
@@ -366,7 +359,6 @@ public class Controladora implements Serializable {
 
     public void cancelarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        cita.setEstado(EstadoCita.CANCELADA);
     }
 
     public void enviarNotificacion() throws Exception {
@@ -567,14 +559,18 @@ public class Controladora implements Serializable {
         Properties propiedades = new Properties();
 
         propiedades.put("mail.smtp.host", "smtp.gmail.com");
-        propiedades.put("mail.smtp.port", "587");
+        propiedades.put("mail.smtp.port", "465");
         propiedades.put("mail.smtp.auth", "true");
-        propiedades.put("mail.smtp.starttls.enable", "true");
+        propiedades.put("mail.smtp.ssl.enable", "true");
+        propiedades.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        propiedades.put("mail.smtp.connectiontimeout", "10000");
+        propiedades.put("mail.smtp.timeout", "10000");
+
 
         Session sesion = Session.getInstance(propiedades, new Authenticator() {
-            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(CORREO_EMISOR, CLAVE_CORREO);
+                return new PasswordAuthentication(
+                        CORREO_EMISOR.trim(), CLAVE_CORREO.replace(" ", ""));
             }
         });
 
@@ -612,5 +608,26 @@ public class Controladora implements Serializable {
 
         enviarCorreo(destinatario, asunto, contenido);
     }
+    public Dia obtenerDia(Integer numDia) throws Exception {
+        validarNumDia(numDia);
+        if (dias.size() < 7 || dias.get(numDia - 1) == null) {return null;}
+        return dias.get(numDia - 1);
+    }
+    public void eliminarHorario(Integer numDia) throws Exception {
+        validarNumDia(numDia);
+        while (dias.size() < 7) {dias.add(null);}
+        dias.set(numDia - 1, null);
+    }
+    public String consultarHoraApertura(Integer numDia) throws Exception {
+        Dia dia = obtenerDia(numDia);
 
+        if (dia == null) {return "";}
+        return dia.getHoraApertura().toLocalTime().toString();
+    }
+    public String consultarHoraCierre(Integer numDia) throws Exception {
+        Dia dia = obtenerDia(numDia);
+
+        if (dia == null) {return "";}
+        return dia.getHoraCierre().toLocalTime().toString();
+    }
 }

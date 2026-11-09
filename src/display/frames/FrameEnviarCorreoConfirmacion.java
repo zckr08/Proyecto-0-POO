@@ -131,10 +131,14 @@ public class FrameEnviarCorreoConfirmacion extends JFrame {
                     enviados++;
                     terminado = true;
                 } catch (Exception e) {
+                    // Mostrar la causa real (autenticación, conexión, etc.) si existe
+                    String detalle = (e.getCause() != null)
+                            ? e.getCause().getMessage()
+                            : e.getMessage();
                     Object[] opciones = {"Reintentar", "Continuar", "Cancelar"};
                     int respuesta = JOptionPane.showOptionDialog(this,
                             "No se pudo enviar el correo a " + cita.getCliente().getEmail()
-                                    + ".\n" + e.getMessage(),
+                                    + ".\n" + detalle,
                             "Error de envío", JOptionPane.DEFAULT_OPTION,
                             JOptionPane.ERROR_MESSAGE, null, opciones, opciones[0]);
                     if (respuesta == 0) {
@@ -144,8 +148,7 @@ public class FrameEnviarCorreoConfirmacion extends JFrame {
                         omitidos++;
                         terminado = true;
                     } else {
-                        JOptionPane.showMessageDialog(this,
-                                "Envío cancelado. Correos enviados: " + enviados);
+                        JOptionPane.showMessageDialog(this, "Envío cancelado. Correos enviados: " + enviados);
                         return;
                     }
                 }
