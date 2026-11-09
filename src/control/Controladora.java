@@ -567,10 +567,9 @@ public class Controladora implements Serializable {
         Properties propiedades = new Properties();
 
         propiedades.put("mail.smtp.host", "smtp.gmail.com");
-        propiedades.put("mail.smtp.port", "587");
+        propiedades.put("mail.smtp.port", "465");
         propiedades.put("mail.smtp.auth", "true");
-        propiedades.put("mail.smtp.starttls.enable", "true");
-        propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        propiedades.put("mail.smtp.ssl.enable", "true");
         propiedades.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         propiedades.put("mail.smtp.connectiontimeout", "10000");
         propiedades.put("mail.smtp.timeout", "10000");
