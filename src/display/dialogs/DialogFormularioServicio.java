@@ -27,7 +27,7 @@ public class DialogFormularioServicio extends JDialog {
         campoDescripcion.setFont(font);
         campoDescripcion.setForeground(verdeOscuro);
 
-        if (opcion.equals("Modificar servicio")) {
+        if (opcion.equals("Modificar Servicio")) {
             try {
                 campoDescripcion.setText(controladora.obtenerServicio(index).getDescripcion());
             } catch (Exception e) {
@@ -37,13 +37,13 @@ public class DialogFormularioServicio extends JDialog {
             campoDescripcion.setEditable(true);
         }
 
-        else if (opcion.equals("Crear servicio")) {
+        else if (opcion.equals("Crear Servicio")) {
             campoDescripcion.setText("");
 
             campoDescripcion.setEditable(true);
         }
 
-        else if (opcion.equals("Consultar servicio")) {
+        else if (opcion.equals("Consultar Servicio")) {
             try {
                 campoDescripcion.setText(controladora.obtenerServicio(index).getDescripcion());
             } catch (Exception e) {
