@@ -93,8 +93,7 @@ public class Controladora implements Serializable {
 
     // Indica si la cita sigue pendiente: no está cancelada y su fecha no ha pasado
     private boolean estaProgramada(Cita cita) {
-        return cita.getEstado() != EstadoCita.CANCELADA
-                && !cita.getFechaHora().isBefore(LocalDateTime.now());
+        return !cita.getFechaHora().isBefore(LocalDateTime.now());
     }
 
     // Indica si hay un horario de atención establecido para el día de la semana de la fecha
@@ -116,8 +115,7 @@ public class Controladora implements Serializable {
             throw new Exception("La hora de la cita está fuera del horario de atención.");
         }
         for (Cita cita : citas) {
-            if (cita != citaActual && cita.getEstado() != EstadoCita.CANCELADA
-                    && cita.getFechaHora().equals(fechaHora)) {
+            if (cita != citaActual && cita.getFechaHora().equals(fechaHora)) {
                 throw new Exception("Ya existe una cita en esa fecha y hora.");
             }
         }
@@ -298,8 +296,6 @@ public class Controladora implements Serializable {
         datos.add(cita.getServicio().getDescripcion());
         if (cita.getEstado() == EstadoCita.CONFIRMADA) {
             datos.add("Confirmada");
-        } else if (cita.getEstado() == EstadoCita.CANCELADA) {
-            datos.add("Cancelada");
         } else {
             datos.add("Sin confirmar");
         }
@@ -355,9 +351,6 @@ public class Controladora implements Serializable {
 
     public void confirmarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        if (cita.getEstado() == EstadoCita.CANCELADA) {
-            throw new Exception("No se puede confirmar una cita cancelada.");
-        }
         if (cita.getEstado() == EstadoCita.CONFIRMADA) {
             throw new Exception("La cita ya está confirmada.");
         }
@@ -366,7 +359,6 @@ public class Controladora implements Serializable {
 
     public void cancelarCita(Integer posCita) throws Exception {
         Cita cita = obtenerCita(posCita);
-        cita.setEstado(EstadoCita.CANCELADA);
     }
 
     public void enviarNotificacion() throws Exception {
