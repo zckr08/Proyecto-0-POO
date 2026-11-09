@@ -38,7 +38,7 @@ public class PanelInferior extends JPanel {
 
         botonSalir.addActionListener(e -> {
             try {
-                Controladora.getInstance().guardarDatos("datos.dat");
+                Controladora.getInstance().guardarDatos("data.dat");
                 System.exit(0);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al guardar datos", JOptionPane.ERROR_MESSAGE);
