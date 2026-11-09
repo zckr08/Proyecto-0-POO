@@ -608,5 +608,26 @@ public class Controladora implements Serializable {
 
         enviarCorreo(destinatario, asunto, contenido);
     }
+    public Dia obtenerDia(Integer numDia) throws Exception {
+        validarNumDia(numDia);
+        if (dias.size() < 7 || dias.get(numDia - 1) == null) {return null;}
+        return dias.get(numDia - 1);
+    }
+    public void eliminarHorario(Integer numDia) throws Exception {
+        validarNumDia(numDia);
+        while (dias.size() < 7) {dias.add(null);}
+        dias.set(numDia - 1, null);
+    }
+    public String consultarHoraApertura(Integer numDia) throws Exception {
+        Dia dia = obtenerDia(numDia);
 
+        if (dia == null) {return "";}
+        return dia.getHoraApertura().toLocalTime().toString();
+    }
+    public String consultarHoraCierre(Integer numDia) throws Exception {
+        Dia dia = obtenerDia(numDia);
+
+        if (dia == null) {return "";}
+        return dia.getHoraCierre().toLocalTime().toString();
+    }
 }
