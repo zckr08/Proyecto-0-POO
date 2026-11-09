@@ -3,8 +3,10 @@ package display.panels;
 import control.Controladora;
 import display.components.Colores;
 import display.components.Fuentes;
+import display.components.Navegacion;
 import display.components.PanelTabla;
 import display.dialogs.DialogFormularioCita;
+import display.frames.FrameCalendario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -126,7 +128,8 @@ public class PanelCitas extends JPanel {
         botonCalendario.setBackground(verdeOscuro);
         botonCalendario.setForeground(verdeClaro);
         botonCalendario.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "El calendario todavía no está disponible.");
+            FrameCalendario calendario = new FrameCalendario();
+            calendario.setVisible(true);
         });
 
         seccionBotones.add(botonBorrar);
