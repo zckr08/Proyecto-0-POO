@@ -41,7 +41,7 @@ public class Controladora implements Serializable {
     private List<Cliente> listaEspera;
     private Map<String, Cliente> clientes;
     private static final String CORREO_EMISOR = "mmmusecuts@gmail.com";
-    private static final String CLAVE_CORREO = "zciryncmvqhwpego";
+    private static final String CLAVE_CORREO = "hqrcximgznbbxdvy";
 
     private Controladora(){
         citas = new ArrayList<>();
@@ -570,11 +570,16 @@ public class Controladora implements Serializable {
         propiedades.put("mail.smtp.port", "587");
         propiedades.put("mail.smtp.auth", "true");
         propiedades.put("mail.smtp.starttls.enable", "true");
+        propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        propiedades.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        propiedades.put("mail.smtp.connectiontimeout", "10000");
+        propiedades.put("mail.smtp.timeout", "10000");
+
 
         Session sesion = Session.getInstance(propiedades, new Authenticator() {
-            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(CORREO_EMISOR, CLAVE_CORREO);
+                return new PasswordAuthentication(
+                        CORREO_EMISOR.trim(), CLAVE_CORREO.replace(" ", ""));
             }
         });
 

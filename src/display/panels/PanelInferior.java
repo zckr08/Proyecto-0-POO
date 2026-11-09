@@ -6,7 +6,7 @@ import display.components.Colores;
 import display.components.Fuentes;
 import display.dialogs.DialogEstablecerHorario;
 import display.frames.FrameEnviarCorreoConfirmacion;
-
+import control.Controladora;
 import java.awt.*;
 
 public class PanelInferior extends JPanel {
@@ -37,7 +37,12 @@ public class PanelInferior extends JPanel {
         });
 
         botonSalir.addActionListener(e -> {
-            System.exit(0);
+            try {
+                Controladora.getInstance().guardarDatos("datos.dat");
+                System.exit(0);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al guardar datos", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         botonNotificar.addActionListener(e -> {
